@@ -8,6 +8,7 @@ import os
 class Settings:
     """Container of project global settings.
     """
+    fps = 60
     window = {'width': 600, 'height': 600}
     path = {}
     path['file'] = os.path.dirname(os.path.abspath(__file__))
@@ -64,12 +65,12 @@ class Ball(pygame.sprite.Sprite):
     def rotate_left(self):
         """Rotates the ball 90 degrees to the left.
         """
-        self.image_orig = pygame.transform.rotate(self.image, 90)
+        self.image_orig = pygame.transform.rotate(self.image_orig, 90)
 
     def rotate_right(self):
         """Rotates the ball 90 degrees to the right.
         """
-        self.image_orig = pygame.transform.rotate(self.image, -90)
+        self.image_orig = pygame.transform.rotate(self.image_orig, -90)
 
     def scale_up(self):
         """Increase the radius by one pixel.
@@ -111,16 +112,14 @@ if __name__ == '__main__':
     # Preparation
     os.environ['SDL_VIDEO_WINDOW_POS'] = "650, 70"
 
-    #pylint: disable=no-member
     pygame.init()
-    #pylint: enable=no-member
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode(Settings.get_dim())
     ball = pygame.sprite.GroupSingle(Ball())
 
     running = True
     while running:
-        clock.tick(60)
+        clock.tick(Settings.fps)
         ball.sprite.set_center(pygame.mouse.get_pos())  # this differs from the video solution
         pygame.mouse.set_visible(not Settings.inner_rect.collidepoint(ball.sprite.rect.center))
         for event in pygame.event.get():
@@ -150,6 +149,4 @@ if __name__ == '__main__':
         pygame.display.flip()
 
     # bye bye
-    #pylint: disable=no-member
     pygame.quit()
-    #pylint: enable=no-member
